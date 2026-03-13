@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Home from './Home';
+import ForgotPassword from './ForgotPassword';
+import ResetPassword from './ResetPassword';
 
 // Componente para proteger rutas
 const ProtectedRoute = ({ children }) => {
@@ -17,6 +19,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/home" element={
                     <ProtectedRoute>
                         <Home />

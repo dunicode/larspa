@@ -76,6 +76,9 @@ export default function Login() {
                         <input type="password" className={`form-control ${errors.password ? 'is-invalid' : ''}`} value={password} onChange={e => setPassword(e.target.value)} required />
                         {errors.password && <div className="invalid-feedback">{errors.password[0]}</div>}
                     </div>
+                    <div className="mb-3 text-end">
+                        <Link to="/forgot-password" className="text-decoration-none small">¿Olvidaste tu contraseña?</Link>
+                    </div>
                     <button type="submit" className="btn btn-primary w-100">Entrar</button>
                 </form>
                 <p className="mt-3 text-center text-muted small">
