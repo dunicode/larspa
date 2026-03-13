@@ -7,6 +7,7 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const [password_confirmation, setPasswordConfirmation] = useState('');
     const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -17,6 +18,8 @@ export default function Register() {
             setErrors({ password_confirmation: ['Las contraseñas no coinciden.'] });
             return;
         }
+
+        setIsLoading(true);
         
         try {
             const response = await fetch('/api/auth/register', {
@@ -39,15 +42,24 @@ export default function Register() {
                     setErrors({ form: ['Ocurrió un error inesperado.'] });
                 }
                 console.error('Error de registro:', errorData);
+                setIsLoading(false);
             }
         } catch (error) {
             console.error('Error de conexión:', error);
             setErrors({ form: ['No se pudo conectar con el servidor.'] });
+            setIsLoading(false);
         }
     };
 
     return (
         <div className="container d-flex justify-content-center align-items-center vh-100">
+            {isLoading && (
+                <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', zIndex: 1050 }}>
+                    <div className="spinner-border text-success" role="status">
+                        <span className="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            )}
             <div className="card shadow border-0 p-4" style={{ width: '100%', maxWidth: '400px' }}>
                 <h2 className="text-center mb-4 text-success">Crear Cuenta</h2>
                 <form onSubmit={handleSubmit} noValidate>

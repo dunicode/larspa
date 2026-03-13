@@ -5,6 +5,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     // Redirect to home if already logged in (optional UX improvement)
@@ -17,6 +18,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
+        setIsLoading(true);
         
         try {
             const response = await fetch('/api/auth/login', {
@@ -42,15 +44,24 @@ export default function Login() {
                     setErrors({ form: [errorData.message || 'Credenciales incorrectas.'] });
                 }
                 console.error('Error de autenticación:', errorData);
+                setIsLoading(false);
             }
         } catch (error) {
             console.error('Error:', error);
             setErrors({ form: ['No se pudo conectar con el servidor.'] });
+            setIsLoading(false);
         }
     };
 
     return (
         <div className="container d-flex justify-content-center align-items-center vh-100">
+            {isLoading && (
+                <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', zIndex: 1050 }}>
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            )}
             <div className="card shadow border-0 p-4" style={{ width: '100%', maxWidth: '400px' }}>
                 <h2 className="text-center mb-4 text-primary">Iniciar Sesión</h2>
                 <form onSubmit={handleSubmit} noValidate>
