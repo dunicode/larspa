@@ -33,7 +33,7 @@ export default function Login() {
             if (response.ok) {
                 const data = await response.json();
                 // Asumiendo que la API devuelve una propiedad 'token'
-                localStorage.setItem('auth_token', data.token);
+                localStorage.setItem('auth_token', data.access_token);
                 navigate('/home');
             } else {
                 const errorData = await response.json();
