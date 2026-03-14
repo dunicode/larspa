@@ -6,6 +6,8 @@ import Register from './Register';
 import Home from './Home';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
+import Profile from './Profile';
+import Navbar from './Navbar';
 
 // Componente para proteger rutas
 const ProtectedRoute = ({ children }) => {
@@ -23,7 +25,14 @@ function App() {
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/home" element={
                     <ProtectedRoute>
+                        <Navbar />
                         <Home />
+                    </ProtectedRoute>
+                } />
+                <Route path="/profile" element={
+                    <ProtectedRoute>
+                        <Navbar />
+                        <Profile />
                     </ProtectedRoute>
                 } />
             </Routes>
