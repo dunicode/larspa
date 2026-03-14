@@ -66,12 +66,13 @@ export default function Navbar() {
 
                 <div className={`collapse navbar-collapse justify-content-between ${isNavOpen ? 'show' : ''}`} id="navbarNav">
                     <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <Link className={`nav-link ${location.pathname === '/home' ? 'active fw-semibold' : ''}`} to="/home" onClick={() => setIsNavOpen(false)}>Home</Link>
-                        </li>
+                        
                     </ul>
 
                     <ul className="navbar-nav">
+                        <li className="nav-item">
+                            <Link className={`nav-link ${location.pathname === '/home' ? 'active fw-semibold' : ''}`} to="/home" onClick={() => setIsNavOpen(false)}>Home</Link>
+                        </li>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" role="button" onClick={(e) => { e.preventDefault(); setIsDropdownOpen(!isDropdownOpen); }}>
                                 {user.name}

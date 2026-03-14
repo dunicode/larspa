@@ -58,20 +58,30 @@ export default function Profile() {
                 <div className="card-header bg-white border-0 pt-4 pb-0">
                     <h2 className="text-center text-primary">Mi Perfil</h2>
                 </div>
-                <div className="card-body p-4">
+                <div className="card-body p-4 text-center">
                     {user && (
                         <>
-                            <div className="mb-3">
-                                <label className="fw-bold text-muted small">NOMBRE</label>
-                                <p className="fs-5">{user.name}</p>
+                            <div className="mb-4">
+                                <div className="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style={{ width: '80px', height: '80px', fontSize: '2rem' }}>
+                                    {user.name.charAt(0).toUpperCase()}
+                                </div>
+                                <h3 className="mb-0">{user.name}</h3>
+                                <span className="badge bg-light text-primary border border-primary mt-2">Usuario Activo</span>
                             </div>
-                            <div className="mb-3">
-                                <label className="fw-bold text-muted small">CORREO ELECTRÓNICO</label>
-                                <p className="fs-5">{user.email}</p>
-                            </div>
-                            <div className="mb-3">
-                                <label className="fw-bold text-muted small">ID DE USUARIO</label>
-                                <p className="fs-5">#{user.id}</p>
+                            <hr className="my-4 opacity-25" />
+                            <div className="row text-start">
+                                <div className="col-12 mb-3">
+                                    <label className="fw-bold text-muted small d-block mb-1">CORREO ELECTRÓNICO</label>
+                                    <div className="p-2 bg-light rounded border">
+                                        <i className="bi bi-envelope me-2 text-primary"></i>{user.email}
+                                    </div>
+                                </div>
+                                <div className="col-12 mb-3">
+                                    <label className="fw-bold text-muted small d-block mb-1">ID DE USUARIO</label>
+                                    <div className="p-2 bg-light rounded border">
+                                        <i className="bi bi-hash me-2 text-primary"></i>{user.id}
+                                    </div>
+                                </div>
                             </div>
                         </>
                     )}
