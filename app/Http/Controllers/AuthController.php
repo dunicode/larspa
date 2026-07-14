@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
@@ -20,8 +20,11 @@ class AuthController extends Controller
             'email' => $registerUserData['email'],
             'password' => Hash::make($registerUserData['password']),
         ]);
+
+        $user->sendEmailVerificationNotification();
+
         return response()->json([
-            'message' => 'User Created ',
+            'message' => 'User Created. Please verify your email address before logging in.',
         ]);
     }
 
@@ -37,6 +40,13 @@ class AuthController extends Controller
                 'message' => 'Invalid Credentials'
             ],401);
         }
+
+        if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+            return response()->json([
+                'message' => 'Please verify your email address before logging in.'
+            ], 403);
+        }
+
         $token = $user->createToken($user->name.'-AuthToken')->plainTextToken;
         return response()->json([
             'access_token' => $token,

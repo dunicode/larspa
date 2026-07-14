@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthProvider';
 
 export default function Login() {
@@ -7,8 +7,17 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
     const { login } = useAuth();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        if (params.get('verified') === '1') {
+            setSuccessMessage('Tu correo fue verificado correctamente. Ya puedes iniciar sesión.');
+        }
+    }, [location.search]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,6 +68,7 @@ export default function Login() {
             <div className="card shadow border-0 p-4" style={{ width: '100%', maxWidth: '400px' }}>
                 <h2 className="text-center mb-4 text-primary">Iniciar Sesión</h2>
                 <form onSubmit={handleSubmit} noValidate>
+                    {successMessage && <div className="alert alert-success small p-2">{successMessage}</div>}
                     {errors.form && <div className="alert alert-danger small p-2">{errors.form[0]}</div>}
                     <div className="mb-3">
                         <label className="form-label">Email</label>
