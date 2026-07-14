@@ -9,6 +9,9 @@ export default function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const isHomeActive = location.pathname === '/home';
+    const isProfileActive = location.pathname === '/profile';
+
     const handleLogout = async () => {
         await logout();
         navigate('/');
@@ -18,10 +21,10 @@ export default function Navbar() {
         <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
             <div className="container">
                 <Link className="navbar-brand fw-bold text-primary" to="/home">LarSpa</Link>
-                
-                <button 
-                    className="navbar-toggler" 
-                    type="button" 
+
+                <button
+                    className="navbar-toggler"
+                    type="button"
                     onClick={() => setIsNavOpen(!isNavOpen)}
                     aria-label="Toggle navigation"
                 >
@@ -29,20 +32,43 @@ export default function Navbar() {
                 </button>
 
                 <div className={`collapse navbar-collapse justify-content-between ${isNavOpen ? 'show' : ''}`} id="navbarNav">
-                    <ul className="navbar-nav">
-                        
-                    </ul>
+                    <ul className="navbar-nav"></ul>
 
                     <ul className="navbar-nav">
                         <li className="nav-item">
-                            <Link className={`nav-link ${location.pathname === '/home' ? 'active font-black' : ''}`} to="/home" onClick={() => setIsNavOpen(false)}>Home</Link>
+                            <Link
+                                className={`nav-link px-3 py-2 rounded-md ${isHomeActive ? 'active fw-bold text-primary bg-primary-subtle' : 'text-dark'}`}
+                                to="/home"
+                                onClick={() => setIsNavOpen(false)}
+                            >
+                                Home
+                            </Link>
                         </li>
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" role="button" onClick={(e) => { e.preventDefault(); setIsDropdownOpen(!isDropdownOpen); }}>
+                            <a
+                                className={`nav-link dropdown-toggle px-3 py-2 rounded-md ${isProfileActive ? 'fw-bold text-primary bg-primary-subtle' : 'text-dark'}`}
+                                href="#"
+                                role="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setIsDropdownOpen(!isDropdownOpen);
+                                }}
+                            >
                                 {user?.name || 'Usuario'}
                             </a>
                             <ul className={`dropdown-menu dropdown-menu-end ${isDropdownOpen ? 'show' : ''}`} style={{ right: 0, left: 'auto' }}>
-                                <li><Link className="dropdown-item" to="/profile" onClick={() => { setIsDropdownOpen(false); setIsNavOpen(false); }}>Ver Perfil</Link></li>
+                                <li>
+                                    <Link
+                                        className={`dropdown-item ${isProfileActive ? 'active fw-bold text-white' : ''}`}
+                                        to="/profile"
+                                        onClick={() => {
+                                            setIsDropdownOpen(false);
+                                            setIsNavOpen(false);
+                                        }}
+                                    >
+                                        Ver Perfil
+                                    </Link>
+                                </li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li><button className="dropdown-item text-danger" onClick={handleLogout}>Cerrar Sesión</button></li>
                             </ul>
