@@ -1,42 +1,33 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './AuthProvider';
+import PublicRoute from './PublicRoute';
+import PrivateRoute from './PrivateRoute';
+import Layout from './Layout';
+import Main from './Main';
 import Login from './Login';
 import Register from './Register';
 import Home from './Home';
+import Profile from './Profile';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
-import Profile from './Profile';
-import Navbar from './Navbar';
-
-// Componente para proteger rutas
-const ProtectedRoute = ({ children }) => {
-    const isAuthenticated = localStorage.getItem('auth_token');
-    return isAuthenticated ? children : <Navigate to="/" replace />;
-};
 
 function App() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password/:token" element={<ResetPassword />} />
-                <Route path="/home" element={
-                    <ProtectedRoute>
-                        <Navbar />
-                        <Home />
-                    </ProtectedRoute>
-                } />
-                <Route path="/profile" element={
-                    <ProtectedRoute>
-                        <Navbar />
-                        <Profile />
-                    </ProtectedRoute>
-                } />
-            </Routes>
-        </BrowserRouter>
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<PublicRoute><Layout><Main /></Layout></PublicRoute>} />
+                    <Route path="/login" element={<PublicRoute><Layout><Login /></Layout></PublicRoute>} />
+                    <Route path="/register" element={<PublicRoute><Layout><Register /></Layout></PublicRoute>} />
+                    <Route path="/forgot-password" element={<PublicRoute><Layout><ForgotPassword /></Layout></PublicRoute>} />
+                    <Route path="/reset-password/:token" element={<PublicRoute><Layout><ResetPassword /></Layout></PublicRoute>} />
+                    <Route path="/home" element={<PrivateRoute><Layout><Home /></Layout></PrivateRoute>} />
+                    <Route path="/profile" element={<PrivateRoute><Layout><Profile /></Layout></PrivateRoute>} />
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
     );
 }
 

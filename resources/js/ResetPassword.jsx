@@ -40,7 +40,7 @@ export default function ResetPassword() {
 
             if (response.ok) {
                 setStatus(data.status + ' Serás redirigido al login.');
-                setTimeout(() => navigate('/'), 4000);
+                setTimeout(() => navigate('/login'), 4000);
             } else {
                 setErrors(data.errors || { form: [data.message || 'Ocurrió un error.'] });
             }

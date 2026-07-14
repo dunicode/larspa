@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from './AuthProvider';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -7,13 +8,7 @@ export default function Login() {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-
-    // Redirect to home if already logged in (optional UX improvement)
-    useEffect(() => {
-        if (localStorage.getItem('auth_token')) {
-            navigate('/home');
-        }
-    }, [navigate]);
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,8 +27,7 @@ export default function Login() {
 
             if (response.ok) {
                 const data = await response.json();
-                // Asumiendo que la API devuelve una propiedad 'token'
-                localStorage.setItem('auth_token', data.access_token);
+                await login(data.access_token);
                 navigate('/home');
             } else {
                 const errorData = await response.json();

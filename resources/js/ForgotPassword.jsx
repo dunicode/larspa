@@ -66,7 +66,7 @@ export default function ForgotPassword() {
                     <button type="submit" className="btn btn-primary w-100">Enviar enlace</button>
                 </form>
                 <p className="mt-3 text-center text-muted small">
-                    <Link to="/" className="text-decoration-none">Volver al Login</Link>
+                    <Link to="/login" className="text-decoration-none">Volver al Login</Link>
                 </p>
             </div>
         </div>

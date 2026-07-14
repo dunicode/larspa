@@ -33,7 +33,7 @@ export default function Register() {
 
             if (response.ok) {
                 alert('¡Registro exitoso! Ahora serás redirigido para iniciar sesión.');
-                navigate('/');
+                navigate('/login');
             } else {
                 const errorData = await response.json();
                 if (errorData && errorData.errors) {
@@ -87,7 +87,7 @@ export default function Register() {
                     <button type="submit" className="btn btn-success w-100">Registrarse</button>
                 </form>
                 <p className="mt-3 text-center text-muted small">
-                    ¿Ya tienes cuenta? <Link to="/" className="text-decoration-none">Inicia sesión</Link>
+                    ¿Ya tienes cuenta? <Link to="/login" className="text-decoration-none">Inicia sesión</Link>
                 </p>
             </div>
         </div>

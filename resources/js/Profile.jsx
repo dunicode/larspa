@@ -1,46 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useAuth } from './AuthProvider';
 
 export default function Profile() {
-    const [user, setUser] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchProfile = async () => {
-            const token = localStorage.getItem('auth_token');
-            if (!token) {
-                navigate('/');
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/auth/profile', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json',
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setUser(data);
-                } else {
-                    // Si falla el token (ej. expirado), mandamos al login
-                    localStorage.removeItem('auth_token');
-                    navigate('/');
-                }
-            } catch (error) {
-                console.error(error);
-                localStorage.removeItem('auth_token');
-                navigate('/');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchProfile();
-    }, [navigate]);
+    const { user, isLoading } = useAuth();
 
     if (isLoading) {
         return (
