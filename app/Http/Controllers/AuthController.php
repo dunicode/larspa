@@ -29,7 +29,7 @@ class AuthController extends Controller
         $loginUserData = $request->validate([
             'email'=>'required|string|email',
             'password'=>'required|min:8',
-            'device_name' => 'required',
+            'device_name' => 'required|string',
         ]);
         $user = User::where('email',$loginUserData['email'])->first();
         if(!$user || !Hash::check($loginUserData['password'],$user->password)){
@@ -37,7 +37,10 @@ class AuthController extends Controller
                 'message' => 'Invalid Credentials'
             ],401);
         }
-        $token = $user->createToken($user->name.'-AuthToken')->plainTextToken;
+
+        $deviceName = trim(substr($loginUserData['device_name'], 0, 100));
+        $token = $user->createToken($deviceName ?: 'web')->plainTextToken;
+
         return response()->json([
             'access_token' => $token,
         ]);
@@ -89,6 +92,42 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
             ? response()->json(['status' => __($status)])
             : response()->json(['errors' => ['email' => [__($status)]]], 422);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = $request->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'errors' => ['current_password' => ['La contraseña actual es incorrecta.']],
+            ], 422);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        $currentToken = $request->user()->currentAccessToken();
+        $deviceName = $currentToken?->name ?? 'current-device';
+
+        if ($currentToken) {
+            $user->tokens()->where('id', '!=', $currentToken->id)->delete();
+            $currentToken->delete();
+        } else {
+            $user->tokens()->delete();
+        }
+
+        $newToken = $user->createToken($deviceName.'-AuthToken')->plainTextToken;
+
+        return response()->json([
+            'status' => 'Contraseña actualizada correctamente.',
+            'access_token' => $newToken,
+        ]);
     }
     
 }

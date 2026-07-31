@@ -6,6 +6,7 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('auth_token'));
     const [isLoading, setIsLoading] = useState(true);
+    const [shouldFetchProfile, setShouldFetchProfile] = useState(true);
 
     const fetchUserProfile = async (authToken) => {
         try {
@@ -23,23 +24,36 @@ export function AuthProvider({ children }) {
             }
         } catch (error) {
             console.error('Error fetching user profile:', error);
-            setIsLoading(false);
+            logoutUser();
         } finally {
             setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        if (token) {
+        if (!token) {
+            setIsLoading(false);
+            return;
+        }
+
+        if (shouldFetchProfile) {
             fetchUserProfile(token);
         } else {
             setIsLoading(false);
+            setShouldFetchProfile(true);
         }
-    }, [token]);
+    }, [token, shouldFetchProfile]);
 
     const login = async (newToken) => {
         setIsLoading(true);
         localStorage.setItem('auth_token', newToken);
+        setShouldFetchProfile(true);
+        setToken(newToken);
+    };
+
+    const updateToken = (newToken, fetchProfile = false) => {
+        localStorage.setItem('auth_token', newToken);
+        setShouldFetchProfile(fetchProfile);
         setToken(newToken);
     };
 
@@ -48,6 +62,12 @@ export function AuthProvider({ children }) {
         setToken(null);
         setUser(null);
         setIsLoading(false);
+    };
+
+    const clearAuth = () => {
+        localStorage.removeItem('auth_token');
+        setToken(null);
+        setUser(null);
     };
 
     const logout = async () => {
@@ -71,7 +91,7 @@ export function AuthProvider({ children }) {
     const isAuthenticated = !!token;
 
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, login, logout }}>
+        <AuthContext.Provider value={{ user, token, isAuthenticated, isLoading, login, updateToken, logout, clearAuth }}>
             {children}
         </AuthContext.Provider>
     );

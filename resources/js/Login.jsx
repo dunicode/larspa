@@ -16,13 +16,17 @@ export default function Login() {
         setIsLoading(true);
         
         try {
+            const deviceName = typeof navigator !== 'undefined'
+                ? `${navigator.platform} - ${navigator.userAgent}`
+                : 'web';
+
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ email, password, device_name: 'web'})
+                body: JSON.stringify({ email, password, device_name: deviceName })
             });
 
             if (response.ok) {
