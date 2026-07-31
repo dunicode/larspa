@@ -10,6 +10,7 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import Profile from './Profile';
+import Sessions from './Sessions';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 import ChangePassword from './ChangePassword';
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/reset-password/:token" element={<PublicRoute><Layout><ResetPassword /></Layout></PublicRoute>} />
                     <Route path="/home" element={<PrivateRoute><Layout><Home /></Layout></PrivateRoute>} />
                     <Route path="/profile" element={<PrivateRoute><Layout><Profile /></Layout></PrivateRoute>} />
+                    <Route path="/sessions" element={<PrivateRoute><Layout><Sessions /></Layout></PrivateRoute>} />
                     <Route path="/change-password" element={<PrivateRoute><Layout><ChangePassword /></Layout></PrivateRoute>} />
                 </Routes>
             </BrowserRouter>

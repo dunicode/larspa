@@ -12,4 +12,7 @@ Route::prefix('auth')->group(function () {
     Route::post('change-password', [AuthController::class, 'changePassword'])->middleware('auth:sanctum');
     Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
     Route::get('profile',[AuthController::class,'profile'])->middleware('auth:sanctum');
+    Route::get('sessions',[AuthController::class,'sessions'])->middleware('auth:sanctum');
+    Route::delete('sessions/{id}',[AuthController::class,'deleteSession'])->middleware('auth:sanctum');
+    Route::post('sessions/terminate-others',[AuthController::class,'terminateOtherSessions'])->middleware('auth:sanctum');
 });

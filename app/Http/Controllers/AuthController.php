@@ -50,6 +50,61 @@ class AuthController extends Controller
         return $request->user();
     }
 
+    public function sessions(Request $request)
+    {
+        $user = $request->user();
+        $currentToken = $user->currentAccessToken();
+
+        $sessions = $user->tokens()
+            ->select('id', 'name', 'created_at', 'last_used_at')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($token) use ($currentToken) {
+                return [
+                    'id' => $token->id,
+                    'device' => $token->name,
+                    'created_at' => $token->created_at?->toDateTimeString(),
+                    'last_used_at' => $token->last_used_at?->toDateTimeString(),
+                    'is_current' => $currentToken ? $currentToken->id === $token->id : false,
+                ];
+            });
+
+        return response()->json(['sessions' => $sessions]);
+    }
+
+    public function deleteSession(Request $request, $id)
+    {
+        $user = $request->user();
+        $currentToken = $user->currentAccessToken();
+        $session = $user->tokens()->where('id', $id)->first();
+
+        if (!$session) {
+            return response()->json(['message' => 'Sesión no encontrada.'], 404);
+        }
+
+        if ($currentToken && $session->id === $currentToken->id) {
+            return response()->json(['message' => 'No puedes cerrar la sesión actual.'], 422);
+        }
+
+        $session->delete();
+
+        return response()->json(['status' => 'Sesión cerrada correctamente.']);
+    }
+
+    public function terminateOtherSessions(Request $request)
+    {
+        $user = $request->user();
+        $currentToken = $user->currentAccessToken();
+
+        if ($currentToken) {
+            $user->tokens()->where('id', '!=', $currentToken->id)->delete();
+        } else {
+            $user->tokens()->delete();
+        }
+
+        return response()->json(['status' => 'Otras sesiones cerradas correctamente.']);
+    }
+
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
 

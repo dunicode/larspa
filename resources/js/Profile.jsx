@@ -1,8 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthProvider';
 
 export default function Profile() {
     const { user, isLoading } = useAuth();
+    const navigate = useNavigate();
+
+    const goSessions = () => {
+        navigate('/sessions');
+    };
 
     if (isLoading) {
         return (
@@ -43,6 +49,11 @@ export default function Profile() {
                                     <div className="p-2 bg-light rounded border">
                                         <i className="bi bi-envelope me-2 text-primary"></i>{user.email}
                                     </div>
+                                </div>
+                                <div className="col-12 text-center mt-4">
+                                    <button type="button" className="btn btn-outline-primary" onClick={goSessions}>
+                                        Ver sesiones abiertas
+                                    </button>
                                 </div>
                             </div>
                         </>
