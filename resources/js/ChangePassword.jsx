@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 export default function ChangePassword() {
     const { token, updateToken } = useAuth();
+    const navigate = useNavigate();
 
     const [current_password, setCurrentPassword] = useState('');
     const [password, setPassword] = useState('');
@@ -10,6 +12,10 @@ export default function ChangePassword() {
     const [errors, setErrors] = useState({});
     const [status, setStatus] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    const goProfile = () => {
+        navigate('/profile');
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,7 +64,7 @@ export default function ChangePassword() {
     };
 
     return (
-        <div className="container d-flex justify-content-center align-items-center min-vh-70 py-5">
+        <div className="container d-flex justify-content-center align-items-center min-vh-70 mt-3">
             {isLoading && (
                 <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', zIndex: 1050 }}>
                     <div className="spinner-border text-primary" role="status"><span className="visually-hidden">Cargando...</span></div>
@@ -84,7 +90,10 @@ export default function ChangePassword() {
                         <input type="password" className={`form-control ${errors.password_confirmation ? 'is-invalid' : ''}`} value={password_confirmation} onChange={e => setPasswordConfirmation(e.target.value)} required />
                         {errors.password_confirmation && <div className="invalid-feedback">{errors.password_confirmation[0]}</div>}
                     </div>
-                    <button type="submit" className="btn btn-primary w-100" disabled={isLoading}>Restablecer</button>
+                    <div className='card-footer d-flex align-items-center justify-content-between'>
+                        <button type="submit" className="btn btn-primary w-100" disabled={isLoading}>Restablecer</button>
+                        <button type="button" onClick={goProfile} className="ms-2 btn btn-outline-secondary w-100">Volver al Perfil</button>
+                    </div>
                 </form>
             </div>
         </div>

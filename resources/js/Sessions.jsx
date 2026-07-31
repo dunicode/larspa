@@ -94,9 +94,9 @@ export default function Sessions() {
     };
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-3">
             <div className="card shadow border-0 mx-auto" style={{ maxWidth: '800px' }}>
-                <div className="card-header bg-white border-0 pt-4 pb-0 d-flex align-items-center justify-content-between">
+                <div className="card-header bg-white border-0 pt-3 pb-0 d-flex align-items-end justify-content-between">
                     <h2 className="text-primary mb-0">Sesiones abiertas</h2>
                     <button className="btn btn-outline-secondary" onClick={() => navigate('/profile')}>
                         Volver al perfil

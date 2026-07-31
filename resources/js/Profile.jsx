@@ -10,6 +10,10 @@ export default function Profile() {
         navigate('/sessions');
     };
 
+    const goPassword = () => {
+        navigate('/change-password');
+    };
+
     if (isLoading) {
         return (
             <div className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', zIndex: 1050 }}>
@@ -21,7 +25,7 @@ export default function Profile() {
     }
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-3">
             <div className="card shadow border-0 mx-auto" style={{ maxWidth: '600px' }}>
                 <div className="card-header bg-white border-0 pt-4 pb-0">
                     <h2 className="text-center text-primary">Mi Perfil</h2>
@@ -34,7 +38,6 @@ export default function Profile() {
                                     {user.name.charAt(0).toUpperCase()}
                                 </div>
                                 <h3 className="mb-0">{user.name}</h3>
-                                <span className="badge bg-light text-primary border border-primary mt-2">Cuenta verificada</span>
                             </div>
                             <hr className="my-4 opacity-25" />
                             <div className="row text-start">
@@ -53,6 +56,9 @@ export default function Profile() {
                                 <div className="col-12 text-center mt-4">
                                     <button type="button" className="btn btn-outline-primary" onClick={goSessions}>
                                         Ver sesiones abiertas
+                                    </button>
+                                    <button type="button" className="btn btn-outline-success ms-2" onClick={goPassword}>
+                                        Cambiar Contrasena
                                     </button>
                                 </div>
                             </div>

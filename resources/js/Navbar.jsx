@@ -12,6 +12,7 @@ export default function Navbar() {
     const isHomeActive = location.pathname === '/home';
     const isProfileActive = location.pathname === '/profile';
     const isChangePasswordActive = location.pathname === '/change-password';
+    const isSessions = location.pathname === '/sessions';
 
     const handleLogout = async () => {
         await logout();
@@ -47,7 +48,7 @@ export default function Navbar() {
                         </li>
                         <li className="nav-item dropdown">
                             <a
-                                className={`nav-link dropdown-toggle px-3 py-2 rounded-md ${isProfileActive || isChangePasswordActive ? 'fw-bold text-primary bg-primary-subtle' : 'text-dark'}`}
+                                className={`nav-link dropdown-toggle px-3 py-2 rounded-md ${isProfileActive || isChangePasswordActive || isSessions ? 'fw-bold text-primary bg-primary-subtle' : 'text-dark'}`}
                                 href="#"
                                 role="button"
                                 onClick={(e) => {
@@ -68,18 +69,6 @@ export default function Navbar() {
                                         }}
                                     >
                                         Ver Perfil
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        className={`dropdown-item ${isChangePasswordActive ? 'active fw-bold text-white' : ''}`}
-                                        to="/change-password"
-                                        onClick={() => {
-                                            setIsDropdownOpen(false);
-                                            setIsNavOpen(false);
-                                        }}
-                                    >
-                                        Cambiar contrasena
                                     </Link>
                                 </li>
                                 <li><hr className="dropdown-divider" /></li>
